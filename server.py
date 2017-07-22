@@ -213,6 +213,16 @@ class Server:
                     joinCmd.send(user_socket.socket)
 
             print("{} deleted chatroom {}".format(currUser.alias, cmd.body))
+        elif cmd.type == 'list_users':
+            chatroom = self.chatrooms.get(cmd.body, None)
+
+            for user in chatroom.users:
+                responseCmd = Command()
+                responseCmd.init_join_chatroom(chatroom.name)
+                responseCmd.creator = user
+                responseCmd.send(sock)
+
+                print("User: {} listed for {}".format(user, currUser.alias))
 
     def send_all(self, cmd: Command):
         for user_socket in list(self.users):
